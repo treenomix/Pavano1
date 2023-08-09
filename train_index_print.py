@@ -2,7 +2,7 @@ import os, sys, traceback
 import faiss
 import numpy as np
 from sklearn.cluster import MiniBatchKMeans
-from config import Config
+from multiprocessing import cpu_count
 
 # Example: 
 #       python3 train_index_print.py mi-test v2
@@ -11,7 +11,7 @@ exp_dir_arg = sys.argv[1] if len(sys.argv) > 1 else "mi-test"
 version_arg = sys.argv[2] if len(sys.argv) > 1 else "v2"
 
 now_dir = os.getcwd()
-config = Config()
+n_cpu = cpu_count()
 
 # скопировано и немного доработаны логи из infer-web.py#L585
 def train_index(exp_dir1, version19):
@@ -43,7 +43,7 @@ def train_index(exp_dir1, version19):
                 MiniBatchKMeans(
                     n_clusters=10000,
                     verbose=True,
-                    batch_size=256 * config.n_cpu,
+                    batch_size=256 * n_cpu,
                     compute_labels=False,
                     init="random",
                 )
